@@ -32,7 +32,7 @@ So this project never weakens the helmet:
 - Start from a **certified bicycle helmet**. Never 3D-print the shell.
 - **Never drill, cut or glue** into the helmet.
 - Modules attach with **straps and removable pads** so they break away under impact.
-- They stick out at most 30 mm and have rounded edges.
+- They sit flat on the shell (curved undersides), stick out at most 35–40 mm (30 mm for small modules) and have rounded edges.
 
 ## What it does
 
@@ -74,7 +74,7 @@ motors + ULN2003 · 3 tactile buttons · USB audio + open-ear headset · USB-C p
 pocket · a certified bicycle helmet · 3D-printed PETG/TPU parts.
 
 **No soldering** in the reference build. Every part is printable on a 220 × 220 mm printer.
-See the [bill of materials](docs/en/01-bill-of-materials.md) for parts and cost ranges.
+See the [bill of materials](docs/en/01-bill-of-materials.md) for parts and cost ranges, and the **[buying guide](docs/en/10-buying-guide.md)** for verified purchase links and the most common buying mistakes.
 
 ## Repository
 
@@ -100,7 +100,7 @@ python -m owsh --sim --video path/to/walking_video.mp4
 The simulator shows detections, the three motor bars and the simulated LiDARs. Keyboard shortcuts are in [firmware/README.md](firmware/README.md).
 
 **2. Build a helmet:**
-[Bill of materials](docs/en/01-bill-of-materials.md) → [3D printing](docs/en/03-3d-printing-guide.md) → [Wiring](docs/en/02-wiring-guide.md) → [Assembly & setup](docs/en/04-assembly-guide.md) → [Test plan](docs/en/07-test-plan.md)
+[Bill of materials](docs/en/01-bill-of-materials.md) → [Buying guide](docs/en/10-buying-guide.md) → [3D printing](docs/en/03-3d-printing-guide.md) → [Wiring](docs/en/02-wiring-guide.md) → [Assembly & setup](docs/en/04-assembly-guide.md) → [Test plan](docs/en/07-test-plan.md)
 
 **3. Phone app:** open [`app/`](app/) on Android Chrome over HTTPS, or use the built-in demo helmet to try it out.
 

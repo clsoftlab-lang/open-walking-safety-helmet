@@ -110,7 +110,7 @@ Use part **W3** (spec §4.1), one of these:
   the same strip. Label the strips: SDA, SCL, 5V-S, 5V-M, GND.
 - **Dupont 1-to-N splitters, or a 2 × 8 female header splitter.** Smaller and easier to fit inside the
   cases. Wrap each splitter in heat-shrink tube or tape so it cannot touch other pins.
-- **A small I2C hub** (for example a Qwiic/STEMMA hub) for SDA and SCL, with Dupont adapters.
+- **Do not use a Qwiic/STEMMA QT hub.** Those hubs carry 3.3 V only and use 1 mm JST-SH plugs; the TF-Luna needs 5 V.
 
 For the final install on the helmet, splitters usually fit better than a breadboard. A mini breadboard
 is handy for the bench build.

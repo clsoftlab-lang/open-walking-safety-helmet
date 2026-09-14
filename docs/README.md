@@ -17,10 +17,10 @@ wins. Please open an issue.
 - **헬멧을 사용하려고 합니다** (사용자, 가족, 보행지도사):
   [사용자 가이드](ko/05-사용자가이드.md) → [안전 수칙](ko/06-안전수칙.md)
 - **I want to build one:**
-  [Bill of materials](en/01-bill-of-materials.md) → [3D printing](en/03-3d-printing-guide.md) →
+  [Bill of materials](en/01-bill-of-materials.md) → [Buying guide](en/10-buying-guide.md) → [3D printing](en/03-3d-printing-guide.md) →
   [Wiring](en/02-wiring-guide.md) → [Assembly](en/04-assembly-guide.md) → [Test plan](en/07-test-plan.md)
 - **직접 만들려고 합니다:**
-  [부품 목록](ko/01-부품목록.md) → [3D 프린팅](ko/03-3D프린팅가이드.md) →
+  [부품 목록](ko/01-부품목록.md) → [구매 가이드](ko/10-구매가이드.md) → [3D 프린팅](ko/03-3D프린팅가이드.md) →
   [배선](ko/02-배선가이드.md) → [조립](ko/04-조립가이드.md) → [시험 계획](ko/07-시험계획.md)
 - **I want to contribute:** [CONTRIBUTING.md](../CONTRIBUTING.md) · [Roadmap](en/08-patent-and-roadmap.md) ·
   [Translation guide](en/09-translation-guide.md)
@@ -39,6 +39,7 @@ wins. Please open an issue.
 | 07 | [Test plan](en/07-test-plan.md) | [시험 계획](ko/07-시험계획.md) | Builders, testers, O&M instructors |
 | 08 | [Patent mapping and roadmap](en/08-patent-and-roadmap.md) | [특허 대응표와 로드맵](ko/08-특허와로드맵.md) | Contributors |
 | 09 | [Translation guide](en/09-translation-guide.md) | [번역 가이드](ko/09-번역가이드.md) | Translators, reviewers |
+| 10 | [Buying guide (verified links)](en/10-buying-guide.md) | [구매 가이드 (실제 구매 링크)](ko/10-구매가이드.md) | Builders |
 
 ## Same list, without a table · 표 없이 같은 목록
 
@@ -54,6 +55,7 @@ English:
 - [07 Test plan](en/07-test-plan.md)
 - [08 Patent mapping and roadmap](en/08-patent-and-roadmap.md)
 - [09 Translation guide](en/09-translation-guide.md)
+- [10 Buying guide](en/10-buying-guide.md)
 
 한국어:
 
@@ -67,6 +69,7 @@ English:
 - [07 시험 계획](ko/07-시험계획.md)
 - [08 특허 대응표와 로드맵](ko/08-특허와로드맵.md)
 - [09 번역 가이드](ko/09-번역가이드.md)
+- [10 구매 가이드](ko/10-구매가이드.md)
 
 ## Project files · 프로젝트 파일
 

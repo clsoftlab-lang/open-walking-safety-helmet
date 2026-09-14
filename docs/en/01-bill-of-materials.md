@@ -6,7 +6,9 @@ This page lists every part you need for the reference build, with approximate pr
 to look for them. The authoritative part list is [§4.1 of the system design specification](00-system-design-spec.md#41-bill-of-materials-reference-build).
 If this page and the spec ever disagree, the spec wins. Please open an issue so we can fix it.
 
-A machine-readable version is in [`../bom.csv`](../bom.csv). It includes columns for part, spec,
+> **Ready to order?** Use the [buying guide](10-buying-guide.md): verified purchase links, part numbers and the most common buying mistakes.
+
+A machine-readable version is in [`../bom.csv`](../bom.csv) (now with official, global and Korean purchase-link columns). It includes columns for part, spec,
 search keyword, price range and shop categories.
 
 > **About prices.** All prices are **approximate ranges in US dollars, checked in September 2026**.
@@ -57,13 +59,13 @@ Refs match the spec, the wiring guide and the firmware.
 | D1 | ULN2003 driver board (from 28BYJ-48 kit) | 1 | Drives the 3 motors; sits in the aux pod | `ULN2003 driver board 28BYJ-48` | 1–3 |
 | B1–B3 | 12 × 12 mm tactile switches (or 3-pin button modules, **3.3 V, active-low**) | 3 | Momentary | `12x12mm tactile switch` | 0.3–1.5 each |
 | L1 | 3 mm LED + 330 Ω resistor (or LED module) | 1 | Status for sighted helpers | `3mm LED module` | 0.2–1 |
-| A1 | USB audio adapter, headphone + mic jacks | 1 | Pi 5 has no 3.5 mm jack; sits in the aux pod | `USB audio adapter headphone mic` | 5–15 |
+| A1 | USB audio adapter with a real mic input | 1 | Pi 5 has no 3.5 mm jack; sits in the aux pod. Must match the headset plug (4-pole TRRS combo jack, or split jacks + TRRS splitter) — see the [buying guide](10-buying-guide.md) | `USB audio adapter headphone mic` | 5–15 |
 | A2 | Open-ear / bone-conduction wired headset with mic | 1 | Must not block the ears | `wired bone conduction headphones mic` | 15–60 |
 | P1 | USB-C PD power bank, ≥ 5 V 3 A, 10 000–20 000 mAh | 1 | Pocket or waist bag | `USB-C PD power bank 20000mAh` | 20–45 |
 | P2 | USB-C cable 1.5 m + magnetic breakaway USB-C adapter (3 A) | 1 set | Prevents neck snagging | `magnetic USB-C breakaway adapter 3A` | 8–20 |
 | W1 | Dupont F-F 20 cm (40-pack), a few M-F 20–30 cm, **6-pin** 1.25 mm leads for TF-Luna | 1 set | Pin 5 is needed for I2C mode | `Dupont jumper wire female female 20cm` | 4–10 |
 | W2 | 20 mm hook-and-loop straps (200 mm) + 3M Dual Lock / VHB pads | 1 set | 8–10 straps; Dual Lock for both faces of 3 saddles | `3M Dual Lock reclosable fastener` | 10–25 |
-| W3 | Dupont splitter / small I2C hub for shared SDA, SCL, 5 V, 3.3 V and GND lines | 1 | For example a Qwiic/STEMMA hub or a 2 × 8 female header splitter | `Dupont splitter 1 to 4 female` | 1–5 |
+| W3 | Dupont 1-to-N female splitter cables for shared SDA, SCL, 5 V, 3.3 V and GND lines | 1 set | Or a 2 × 8 female header splitter. Not a Qwiic/STEMMA hub (3.3 V only, JST-SH plugs) | `Dupont splitter 1 to 4 female` | 1–5 |
 | W4 | USB-A male → female extension cable, 10–15 cm | 1 | Pi 5 USB 2.0 port → audio adapter in the aux pod | `USB A male female extension 15cm` | 2–5 |
 | F1 | M2.5 × 6 screws + 5 mm standoffs (Pi); M2 × 5 screws (camera, TF-Luna) | 1 set | The printed parts also use M2.5 × 8 pan head (lids) and M2 × 8 (pod cover), see [`hardware/README.md`](../../hardware/README.md) | `M2.5 standoff screw kit` | 5–10 |
 

@@ -119,13 +119,13 @@ subsystem, thread-safe event bus. Runs as a systemd service with automatic resta
 | D1 | ULN2003 driver board (from 28BYJ-48 kit) | 1 | Drives the 3 motors |
 | B1–B3 | 12 × 12 mm tactile button modules (3-pin) or bare 12 mm tactile switches + Dupont | 3 | Caps are printed with distinct shapes |
 | L1 | 3 mm LED + 330 Ω (or LED module) | 1 | Status for sighted helpers |
-| A1 | USB audio adapter with headphone + mic jacks | 1 | Pi 5 has no 3.5 mm jack |
+| A1 | USB audio adapter with a real microphone input (not "line in") | 1 | Pi 5 has no 3.5 mm jack. Match the headset plug: a 4-pole (TRRS, CTIA) combo jack, or separate headphone + mic jacks plus a TRRS→2×TRS splitter |
 | A2 | Open-ear / bone-conduction wired headset with mic | 1 | Must not block ambient sound |
 | P1 | USB-C power bank, PD, ≥ 5 V 3 A output, 10 000–20 000 mAh | 1 | Carried in pocket / waist bag |
 | P2 | USB-C cable 1.5 m + magnetic breakaway USB-C adapter rated 3 A | 1 | Breakaway prevents neck snagging |
 | W4 | USB-A male → female extension cable, 10–15 cm | 1 | Pi 5 USB 2.0 port → audio adapter in the aux pod |
 | W1 | Dupont jumper wires F-F 20 cm (40-pack), **6-pin** 1.25 mm leads for TF-Luna (pin 5 is needed for I2C mode) | 1 set | |
-| W3 | Dupont splitter / small I2C hub for shared SDA, SCL, 5 V, 3.3 V and GND lines (e.g. Qwiic/STEMMA hub or 2×8 female header splitter) | 1 | 3 I2C devices and several 5 V loads share header pins |
+| W3 | Dupont 1-to-N female splitter cables (or 2×8 female header splitter) for shared SDA, SCL, 5 V, 3.3 V and GND lines | 1 set | 3 I2C devices and several 5 V loads share header pins. **Not** a Qwiic/STEMMA QT hub: those are 3.3 V-only with 1 mm JST-SH plugs, while TF-Luna needs 5 V |
 | W2 | 20 mm hook-and-loop straps (200 mm), 3M Dual Lock / VHB pads | 1 set | |
 | F1 | M2.5 × 6 screws + 5 mm standoffs (Pi), M2 × 5 screws (camera, TF-Luna) | 1 set | |
 | G1 | Optional: u-blox NEO-M8N GPS (UART) | 0–1 | Phone-free location |
