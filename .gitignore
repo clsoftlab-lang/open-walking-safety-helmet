@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+build/
+dist/
+
+# Downloaded models and sample media (fetched by tools, not committed)
+firmware/models/*.onnx
+firmware/samples/
+firmware/data/cache/
+firmware/data/faces/
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Local agent settings
+.claude/

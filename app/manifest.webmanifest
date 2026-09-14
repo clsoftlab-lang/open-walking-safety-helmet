@@ -1,0 +1,19 @@
+{
+  "name": "Open Walking Safety Helmet",
+  "short_name": "OWSH Helmet",
+  "description": "Companion app for the Open Walking Safety Helmet: accessible alert log, location sharing, SOS and settings. Apache-2.0, Copyright 2026 CLSOFTLAB, Dr. Lee Il-guk.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["accessibility", "health", "utilities"],
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

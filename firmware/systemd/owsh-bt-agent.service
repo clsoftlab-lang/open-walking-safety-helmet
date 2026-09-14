@@ -1,0 +1,16 @@
+[Unit]
+Description=OWSH Bluetooth pairing agent (Just Works, no display/keypad on the helmet)
+After=bluetooth.service
+Requires=bluetooth.service
+
+[Service]
+Type=simple
+# bt-agent (package bluez-tools) accepts pairing requests with the NoInputNoOutput capability.
+# Whether a pairing is possible at all is decided by the firmware, which switches BlueZ
+# "pairable" on only while no phone is bonded or during the first 120 s after boot.
+ExecStart=/usr/bin/bt-agent --capability=NoInputNoOutput
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

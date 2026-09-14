@@ -1,0 +1,79 @@
+name: Translation
+description: Add or improve a language for helmet voice, the phone app, or documentation. (한국어로 작성하셔도 됩니다.)
+title: "[Translation] "
+labels: ["translation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. Please read docs/en/09-translation-guide.md first.
+        A language is marked **verified** only after review by a native speaker who is blind, or an O&M instructor.
+        Unverified languages still ship, with a first-boot notice.
+
+  - type: input
+    id: language
+    attributes:
+      label: Language and code
+      placeholder: "e.g. Spanish (es), Brazilian Portuguese (pt-BR)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: What will be translated
+      multiple: true
+      options:
+        - Helmet voice (firmware/owsh/i18n/<lang>.json)
+        - Phone app (app/i18n/<lang>.json)
+        - Sign danger keywords (firmware/config/default.yaml)
+        - Documentation (docs/<lang>/)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of work
+      options:
+        - New language
+        - Improve an existing language
+        - Verification review of an existing language
+    validations:
+      required: true
+
+  - type: dropdown
+    id: reviewer
+    attributes:
+      label: Verification reviewer
+      description: Is a reviewer who meets the verified rule available?
+      options:
+        - "Yes - a native speaker who is blind"
+        - "Yes - a native-speaking O&M instructor"
+        - "Not yet - looking for one"
+    validations:
+      required: true
+
+  - type: textarea
+    id: tts
+    attributes:
+      label: Speech engine check
+      description: Does `espeak-ng` (or a `piper` voice) pronounce your language acceptably? Any words it gets wrong?
+    validations:
+      required: false
+
+  - type: textarea
+    id: safety-phrases
+    attributes:
+      label: Safety phrases needing discussion
+      description: For example "step up" and "step down" sound too similar in your language, or "Stop" has no short form.
+    validations:
+      required: false
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Regional variants, right-to-left layout, plural forms, units.
+    validations:
+      required: false

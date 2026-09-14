@@ -1,0 +1,32 @@
+Open Walking Safety Helmet
+Copyright 2026 CLSOFTLAB (씨엘소프트랩), Dr. Lee Il-guk (이일국)
+
+Based on Korean Patent No. 10-2560496, released royalty-free by the patent
+holder. See PATENT_PLEDGE.md.
+
+Licensing of this repository
+----------------------------
+- Software (firmware/, app/, scripts, CI):  Apache License 2.0
+    LICENSES/Apache-2.0.txt
+- Hardware design files (hardware/: OpenSCAD sources, STL, wiring):
+    CERN Open Hardware Licence Version 2 - Permissive (CERN-OHL-P-2.0)
+    LICENSES/CERN-OHL-P-2.0.txt
+- Documentation (docs/, README files, images):
+    Creative Commons Attribution 4.0 International (CC BY 4.0)
+    LICENSES/CC-BY-4.0.txt
+- Patent: see PATENT_PLEDGE.md
+
+Third-party components (not included in this repository; downloaded at setup)
+--------------------------------------------------------------------------
+- OpenCV (Apache-2.0)                     https://opencv.org
+- OpenCV Zoo models (downloaded by firmware/owsh/tools/download_models.py):
+    NanoDet-Plus object detector          Apache-2.0
+    YuNet face detector                   MIT
+    SFace face recognizer                 Apache-2.0
+  See firmware/models/MODELS.md for exact sources and checksums.
+- Optional: RapidOCR (Apache-2.0), bless (MIT), gpiozero (BSD-3-Clause),
+  smbus2 (MIT), picamera2 (BSD-2-Clause), espeak-ng (GPL-3.0, used as a
+  separate program, not linked).
+
+The device is an assistive aid. It is NOT a certified medical device and does
+NOT replace a white cane, guide dog or orientation & mobility training.

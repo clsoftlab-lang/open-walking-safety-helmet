@@ -1,0 +1,84 @@
+name: Feature request
+description: Suggest an improvement, a roadmap item, a cheaper part, or a dataset. (한국어로 작성하셔도 됩니다.)
+title: "[Feature] "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the idea. Please check the roadmap in docs/en/08-patent-and-roadmap.md first.
+        Features that change alert logic, the haptic language, buttons, SOS or the BLE protocol start with a spec change
+        and need a safety review (see GOVERNANCE.md).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Who is it for, and in what situation? For example "blind walkers on shared cycle paths cannot hear bicycles from behind".
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - Firmware
+        - Hardware
+        - Phone app
+        - BLE protocol
+        - Dataset / machine learning
+        - Documentation / translation
+        - Roadmap v1.1 navigation
+        - Roadmap v1.2 elevator and hand guidance
+        - Roadmap v1.3 accessible facility detector
+        - Rear camera
+        - Native app / automatic SOS
+        - Air-curtain experiment
+        - Lighter compute
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: safety-impact
+    attributes:
+      label: Could this change when or how users are warned?
+      options:
+        - "No"
+        - "Yes - needs safety review"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+
+  - type: textarea
+    id: costs
+    attributes:
+      label: Costs and trade-offs
+      description: Power, mass on the head, noise, price, availability worldwide, licences (Apache-2.0 / MIT / BSD only in the default build), privacy.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: help
+    attributes:
+      label: Can you help?
+      options:
+        - label: I can work on this.
+        - label: I can test it with blind or low-vision walkers or an O&M instructor.
+        - label: I can contribute data for it.

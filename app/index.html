@@ -1,0 +1,268 @@
+<!doctype html>
+<!--
+  SPDX-License-Identifier: Apache-2.0
+  Copyright 2026 CLSOFTLAB (씨엘소프트랩), Dr. Lee Il-guk (이일국)
+-->
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>OWSH Helmet</title>
+  <meta name="description" content="Companion app for the Open Walking Safety Helmet: alerts log, location sharing, SOS and settings.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-maskable.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="common.skip">Skip to main content</a>
+
+  <header class="app-header">
+    <p class="brand">
+      <img src="icons/icon.svg" alt="" width="36" height="36">
+      <span data-i18n="app.name">OWSH Helmet</span>
+    </p>
+    <p class="conn-pill" id="conn-pill" data-state="disconnected">
+      <span class="conn-dot" aria-hidden="true"></span>
+      <span id="conn-pill-text" data-i18n="conn.disconnected">Not connected</span>
+    </p>
+    <nav aria-label="Main menu" data-i18n-attr="aria-label:nav.label">
+      <ul class="nav-list">
+        <li><button type="button" class="nav-btn" data-nav="home" data-i18n="nav.helmet">Helmet</button></li>
+        <li><button type="button" class="nav-btn" data-nav="settings" data-i18n="nav.settings">Settings</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <noscript><p class="notice" data-i18n="common.noscript">This app needs JavaScript to be turned on.</p></noscript>
+
+    <!-- ============================ Connect screen ============================ -->
+    <section id="screen-connect" class="screen" data-screen="connect" aria-labelledby="h-connect">
+      <h1 id="h-connect" tabindex="-1" data-i18n="connect.title">Connect your helmet</h1>
+      <p data-i18n="connect.intro">Turn on the helmet and keep it close to this phone. Then choose “Connect helmet” and pick the device whose name starts with OWSH.</p>
+      <p class="note"><span aria-hidden="true">ⓘ </span><span data-i18n="common.assistNotReplace">The helmet assists your white cane or guide dog. It never replaces them.</span></p>
+
+      <div class="stack">
+        <button type="button" id="btn-connect" class="btn btn-primary btn-big" data-i18n="connect.button">Connect helmet</button>
+        <div id="ble-support" class="notice notice-warn" hidden>
+          <h2 class="notice-title"><span aria-hidden="true">⚠ </span><span data-i18n="connect.unsupportedTitle">Bluetooth is not available in this browser</span></h2>
+          <p id="ble-support-text"></p>
+        </div>
+        <p id="connect-error" class="error-text" role="alert"></p>
+        <section id="pairing-help" class="notice" aria-labelledby="h-pairing">
+          <h2 id="h-pairing" class="notice-title" data-i18n="connect.pairingTitle">Pairing with the helmet</h2>
+          <p data-i18n="connect.pairing1">The helmet only accepts phones that are paired with it. The first time you connect, your phone shows a pairing request. Accept it; no code is needed.</p>
+          <p data-i18n="connect.pairing2">A new phone can pair while no phone is paired with the helmet, or within 2 minutes after the helmet is turned on.</p>
+          <p class="note" data-i18n="connect.pairing3">If connection is refused, restart the helmet and connect within 2 minutes.</p>
+        </section>
+        <button type="button" id="btn-demo" class="btn btn-big" aria-describedby="demo-hint" data-i18n="connect.demoButton">Try demo helmet</button>
+        <p id="demo-hint" class="hint" data-i18n="connect.demoHint">The demo helmet simulates alerts, status and an emergency so you can learn the app without hardware.</p>
+      </div>
+
+      <p id="emergency-summary" class="note"></p>
+      <p><button type="button" class="btn btn-link" data-nav="settings" data-i18n="connect.openSettings">Open settings</button></p>
+
+      <details class="tips">
+        <summary data-i18n="connect.howTitle">Connection tips</summary>
+        <ul>
+          <li data-i18n="connect.how1">Turn Bluetooth on. Android may also need Location turned on to find nearby devices.</li>
+          <li data-i18n="connect.how2">Only one phone can be connected to the helmet at a time.</li>
+          <li data-i18n="connect.how3">If the connection drops, the app keeps trying to reconnect while it is open.</li>
+          <li data-i18n="connect.how4">Keep this app open and the screen on. Phones pause web apps when the screen turns off.</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- ============================ Live screen ============================ -->
+    <section id="screen-live" class="screen" data-screen="live" aria-labelledby="h-live" hidden>
+      <h1 id="h-live" tabindex="-1" data-i18n="live.title">Helmet</h1>
+
+      <section class="card" aria-labelledby="h-conn">
+        <h2 id="h-conn" data-i18n="live.connectionHeading">Connection</h2>
+        <p id="conn-state" class="big-text"></p>
+        <p id="link-error" class="error-text" role="alert"></p>
+        <p id="demo-badge" class="badge-demo" hidden><span aria-hidden="true">◆ </span><span data-i18n="live.demoBadge">Demo helmet (simulated)</span></p>
+        <button type="button" id="btn-disconnect" class="btn" data-i18n="live.disconnect">Disconnect</button>
+      </section>
+
+      <section class="card" aria-labelledby="h-status">
+        <h2 id="h-status" data-i18n="status.heading">Helmet status</h2>
+        <p id="status-warning" class="notice notice-warn" hidden></p>
+        <dl class="kv">
+          <div><dt data-i18n="status.faults">Problems</dt><dd id="st-faults">–</dd></div>
+          <div><dt data-i18n="status.fps">Camera speed</dt><dd id="st-fps">–</dd></div>
+          <div><dt data-i18n="status.temp">Processor temperature</dt><dd id="st-temp">–</dd></div>
+          <div id="st-power-row" hidden><dt data-i18n="status.power">Power</dt><dd id="st-power"></dd></div>
+          <div id="st-thermal-row" hidden><dt data-i18n="status.thermal">Heat</dt><dd id="st-thermal"></dd></div>
+          <div><dt data-i18n="status.voice">Helmet voice</dt><dd id="st-voice">–</dd></div>
+          <div><dt data-i18n="status.uptime">Running for</dt><dd id="st-uptime">–</dd></div>
+          <div><dt data-i18n="status.firmware">Firmware</dt><dd id="st-fw">–</dd></div>
+          <div><dt data-i18n="status.lastUpdate">Last update</dt><dd id="st-updated">–</dd></div>
+        </dl>
+      </section>
+
+      <section class="card" aria-labelledby="h-loc">
+        <h2 id="h-loc" data-i18n="loc.heading">Location sharing</h2>
+        <p id="loc-state"></p>
+        <p id="loc-detail" class="hint"></p>
+        <button type="button" class="btn" id="btn-loc-settings" data-nav="settings" data-focus="set-share" data-i18n="loc.change">Change location settings</button>
+      </section>
+
+      <section id="demo-controls" class="card card-demo" aria-labelledby="h-demo" hidden>
+        <h2 id="h-demo" data-i18n="demo.heading">Demo controls</h2>
+        <p class="hint" data-i18n="demo.intro">These buttons make the demo helmet act as if something happened.</p>
+        <div class="button-grid">
+          <button type="button" class="btn" id="demo-sos" data-i18n="demo.sosButton">Simulate SOS (button held)</button>
+          <button type="button" class="btn" id="demo-fall" data-i18n="demo.sosFall">Simulate a fall</button>
+          <button type="button" class="btn" id="demo-where" data-i18n="demo.whereAmI">Simulate “Where am I?” button</button>
+          <button type="button" class="btn" id="demo-fault" aria-pressed="false" data-i18n="demo.cameraFault">Simulate camera covered</button>
+          <button type="button" class="btn" id="demo-pause" aria-pressed="false" data-i18n="demo.pauseAlerts">Pause demo alerts</button>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-log">
+        <h2 id="h-log" data-i18n="log.heading">Messages from the helmet</h2>
+        <label class="check">
+          <input type="checkbox" id="announce-toggle" checked>
+          <span data-i18n="log.announce">Read new messages aloud with the screen reader</span>
+        </label>
+        <p id="log-summary" class="hint" data-i18n="log.empty">No messages yet.</p>
+        <ol id="log" class="log" aria-labelledby="h-log"></ol>
+        <button type="button" class="btn" id="btn-clear-log" data-i18n="log.clear">Clear messages</button>
+      </section>
+    </section>
+
+    <!-- ============================ Settings screen ============================ -->
+    <section id="screen-settings" class="screen" data-screen="settings" aria-labelledby="h-settings" hidden>
+      <h1 id="h-settings" tabindex="-1" data-i18n="settings.title">Settings</h1>
+      <p data-i18n="settings.intro">Settings are saved only on this phone.</p>
+      <p id="settings-status" class="status-text" role="status"></p>
+
+      <form id="settings-form" class="settings" novalidate>
+        <fieldset class="card">
+          <legend data-i18n="settings.languageLegend">Language</legend>
+          <label for="set-lang" data-i18n="settings.language">App language</label>
+          <select id="set-lang">
+            <option value="system" data-i18n="settings.languageSystem">System default</option>
+            <option value="en" lang="en">English</option>
+            <option value="ko" lang="ko">한국어</option>
+          </select>
+        </fieldset>
+
+        <fieldset class="card">
+          <legend data-i18n="settings.emergencyLegend">Emergency number</legend>
+          <label for="set-country" data-i18n="settings.country">Country or region</label>
+          <select id="set-country" aria-describedby="set-emergency-other"></select>
+          <label for="set-emergency" data-i18n="settings.emergencyNumber">Number to call in an emergency</label>
+          <input id="set-emergency" type="tel" inputmode="tel" autocomplete="off" maxlength="16" required
+                 aria-describedby="set-emergency-error set-emergency-hint">
+          <p id="set-emergency-error" class="error-text"></p>
+          <p id="set-emergency-other" class="hint"></p>
+          <p id="set-emergency-hint" class="hint" data-i18n="settings.emergencyHint">Check that this number works where you are. The app never calls by itself.</p>
+        </fieldset>
+
+        <fieldset class="card">
+          <legend data-i18n="settings.guardiansLegend">Guardians</legend>
+          <p id="guardians-hint" class="hint" data-i18n="settings.guardiansHint">Up to 3 phone numbers. They are only used when you choose “Send SMS to guardians”.</p>
+          <label for="set-g1" data-i18n="settings.guardian1">Guardian 1 phone number</label>
+          <input id="set-g1" class="guardian" data-index="0" type="tel" inputmode="tel" autocomplete="off" maxlength="32" aria-describedby="guardians-hint">
+          <label for="set-g2" data-i18n="settings.guardian2">Guardian 2 phone number</label>
+          <input id="set-g2" class="guardian" data-index="1" type="tel" inputmode="tel" autocomplete="off" maxlength="32" aria-describedby="guardians-hint">
+          <label for="set-g3" data-i18n="settings.guardian3">Guardian 3 phone number</label>
+          <input id="set-g3" class="guardian" data-index="2" type="tel" inputmode="tel" autocomplete="off" maxlength="32" aria-describedby="guardians-hint">
+        </fieldset>
+
+        <fieldset class="card">
+          <legend data-i18n="settings.helmetLegend">Helmet voice and sensors</legend>
+          <p id="helmet-hint" class="hint" data-i18n="settings.helmetHint">Changes are sent to the helmet right away when it is connected.</p>
+          <label class="check">
+            <input type="checkbox" id="set-muted">
+            <span data-i18n="settings.muted">Mute information messages (warnings are always spoken)</span>
+          </label>
+          <label for="set-volume" data-i18n="settings.volume">Helmet voice volume</label>
+          <div class="range-row">
+            <input type="range" id="set-volume" min="0" max="100" step="10">
+            <output id="set-volume-out" for="set-volume" aria-hidden="true">80%</output>
+          </div>
+          <fieldset class="radio-group">
+            <legend data-i18n="settings.dropoff">Drop-off sensitivity</legend>
+            <label class="check"><input type="radio" name="dropoff" value="low"> <span data-i18n="settings.dropoff.low">Low: fewer false alarms on dark or wet ground</span></label>
+            <label class="check"><input type="radio" name="dropoff" value="normal"> <span data-i18n="settings.dropoff.normal">Normal (recommended)</span></label>
+            <label class="check"><input type="radio" name="dropoff" value="high"> <span data-i18n="settings.dropoff.high">High: warns earlier, more false alarms</span></label>
+          </fieldset>
+          <button type="button" class="btn" id="btn-test-voice" data-i18n="settings.testVoice">Test helmet voice</button>
+        </fieldset>
+
+        <fieldset class="card">
+          <legend data-i18n="settings.locationLegend">Location</legend>
+          <label class="check">
+            <input type="checkbox" id="set-share" aria-describedby="share-hint">
+            <span data-i18n="settings.shareLocation">Share my location with the helmet</span>
+          </label>
+          <p id="share-hint" class="hint" data-i18n="settings.shareHint">When on and the helmet is connected, the phone sends its location to the helmet every 10 seconds and when you ask “Where am I?”.</p>
+          <label class="check">
+            <input type="checkbox" id="set-geocode" aria-describedby="geocode-hint">
+            <span data-i18n="settings.geocode">Look up the street address (uses the internet)</span>
+          </label>
+          <p id="geocode-hint" class="hint" data-i18n="settings.geocodeHint">Off by default. When on, your coordinates are sent to the OpenStreetMap Nominatim service at most once every 30 seconds.</p>
+          <label class="check">
+            <input type="checkbox" id="set-wake" aria-describedby="wake-hint">
+            <span data-i18n="settings.keepAwake">Keep the screen on while the helmet is connected</span>
+          </label>
+          <p id="wake-hint" class="hint" data-i18n="settings.keepAwakeHint">Phones pause web apps when the screen turns off.</p>
+        </fieldset>
+      </form>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p data-i18n="footer.patent">Open Walking Safety Helmet · Patent KR 10-2560496 released free by CLSOFTLAB, Dr. Lee Il-guk</p>
+    <p><a href="https://github.com/clsoftlab-lang/open-walking-safety-helmet" target="_blank" rel="noopener" data-i18n="footer.source">Source code on GitHub (opens in a new tab)</a></p>
+  </footer>
+
+  <!-- Screen reader announcements (kept outside screens so they exist before content changes). -->
+  <div id="announce-polite" class="visually-hidden" aria-live="polite" aria-relevant="additions"></div>
+  <div id="announce-assertive" class="visually-hidden" aria-live="assertive" aria-relevant="additions"></div>
+
+  <!-- ============================ SOS full-screen alert ============================ -->
+  <dialog id="sos-dialog" class="sos" aria-labelledby="sos-title" data-state="countdown">
+    <div class="sos-inner">
+      <p class="sos-icon" aria-hidden="true">SOS</p>
+      <h1 id="sos-title" tabindex="-1" data-i18n="sos.countdownTitle">Emergency alert countdown</h1>
+      <p id="sos-reason" class="sos-reason"></p>
+      <p id="sos-live" class="visually-hidden" aria-live="assertive"></p>
+
+      <div id="sos-countdown">
+        <p class="sos-count" aria-hidden="true" id="sos-count">10</p>
+        <p class="sos-count-text" id="sos-count-text"></p>
+        <p class="sos-strong" data-i18n="sos.countdownHelp">To cancel, press any button on the helmet.</p>
+        <p data-i18n="sos.countdownPhoneNote">This phone cannot cancel the countdown.</p>
+        <div class="stack">
+          <button type="button" class="btn btn-sos-secondary" id="sos-demo-cancel" hidden data-i18n="demo.cancelSos">Simulate helmet button press (cancels countdown)</button>
+          <button type="button" class="btn btn-sos-secondary" id="sos-hide" data-i18n="sos.hide">Hide this screen (does not cancel)</button>
+        </div>
+      </div>
+
+      <div id="sos-sent" hidden>
+        <p class="sos-strong" data-i18n="sos.sentLead">The helmet sent an emergency alert. Get help now.</p>
+        <div class="stack">
+          <a id="sos-call" class="btn btn-huge btn-sos-call" href="tel:112"><span aria-hidden="true">☎ </span><span id="sos-call-text">Call emergency number</span></a>
+          <a id="sos-sms" class="btn btn-huge btn-sos-sms" href="sms:"><span aria-hidden="true">✉ </span><span data-i18n="sos.sms">Send SMS to guardians</span></a>
+          <p id="sos-guardians" class="sos-small"></p>
+          <button type="button" id="sos-sound" class="btn btn-sos-secondary">Silence alarm sound</button>
+          <button type="button" id="sos-ok" class="btn btn-sos-secondary" data-i18n="sos.ok">I'm OK, close the emergency screen</button>
+        </div>
+        <p class="sos-honest" data-i18n="sos.cannotAutoCall">A web app cannot call or send messages by itself. Tap a button above, then confirm in your phone app.</p>
+        <h2 data-i18n="sos.locationHeading">Your location</h2>
+        <p id="sos-loc"></p>
+        <p id="sos-map-wrap" hidden><a id="sos-map" href="#" target="_blank" rel="noopener" data-i18n="sos.openMap">Open this location on a map</a></p>
+      </div>
+    </div>
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Models are downloaded (python -m owsh.tools.download_models); checksums are in models/MODELS.md
+models/*.onnx
+models/*.part
+
+# Local test media and outputs
+samples/
+
+# Runtime data: face photos/embeddings (private!), TTS cache, first-boot marker
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+build/
+dist/
+*.log

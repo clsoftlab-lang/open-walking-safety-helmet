@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="t">
+  <!-- SPDX-License-Identifier: Apache-2.0 -->
+  <!-- Copyright 2026 CLSOFTLAB (씨엘소프트랩), Dr. Lee Il-guk (이일국) -->
+  <!-- Maskable: full-bleed background, artwork inside the central 80 % safe zone. -->
+  <title id="t">OWSH helmet</title>
+  <rect width="512" height="512" fill="#FFD400"/>
+  <g transform="translate(76.8 60) scale(0.7)">
+    <path d="M88 336C88 196 164 112 256 112S424 196 424 336Z" fill="#000"/>
+    <rect x="64" y="328" width="384" height="48" rx="24" fill="#000"/>
+    <g fill="#FFD400">
+      <rect x="236" y="146" width="40" height="124" rx="20"/>
+      <rect x="150" y="182" width="36" height="104" rx="18" transform="rotate(-26 168 234)"/>
+      <rect x="326" y="182" width="36" height="104" rx="18" transform="rotate(26 344 234)"/>
+    </g>
+    <g fill="none" stroke="#000" stroke-width="22" stroke-linecap="round">
+      <path d="M186 424q70 44 140 0"/>
+    </g>
+  </g>
+</svg>

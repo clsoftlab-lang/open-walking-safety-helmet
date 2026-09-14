@@ -1,0 +1,37 @@
+﻿
+front_pod_base            65s    1213598 bytes
+    ECHO: "OWSH front pod: W=107.6 D(bottom, centre)=41.998 H=31.8452 -> height above shell = 34.8452 mm (uniform across the curved bar)"
+    ECHO: "OWSH NOTE: front pod incl. saddle height above shell = 34.8452 mm > 30 mm (spec P2) - see README"
+front_pod_cover           27s     546702 bytes
+    ECHO: "OWSH front pod: W=107.6 D(bottom, centre)=41.998 H=31.8452 -> height above shell = 34.8452 mm (uniform across the curved bar)"
+    ECHO: "OWSH NOTE: front pod incl. saddle height above shell = 34.8452 mm > 30 mm (spec P2) - see README"
+main_case_base            55s    1707361 bytes
+    ECHO: "OWSH main case: footprint 99.1 (along) x 62.6 (across) mm, centre height above shell 34.6 mm, cap 39.6 mm"
+    ECHO: "OWSH main case clearance cooler: 1.2 mm"
+    ECHO: "OWSH main case clearance USB stacks: 2.88134 mm"
+    ECHO: "OWSH main case clearance header + Dupont: 5.18852 mm"
+    ECHO: "OWSH main case clearance IMU: 10.9802 mm"
+main_case_lid             80s    1167063 bytes
+    ECHO: "OWSH main case: footprint 99.1 (along) x 62.6 (across) mm, centre height above shell 34.6 mm, cap 39.6 mm"
+    ECHO: "OWSH main case clearance cooler: 1.2 mm"
+    ECHO: "OWSH main case clearance USB stacks: 2.88134 mm"
+    ECHO: "OWSH main case clearance header + Dupont: 5.18852 mm"
+    ECHO: "OWSH main case clearance IMU: 10.9802 mm"
+aux_pod_base              75s    1679437 bytes
+    ECHO: "OWSH aux pod: footprint 98.6 x 37.6 mm, height above shell 23.3806 mm"
+aux_pod_lid               75s    1755805 bytes
+    ECHO: "OWSH aux pod: footprint 98.6 x 37.6 mm, height above shell 23.3806 mm"
+saddle_pad                 1s     163013 bytes
+button_module             27s    1036254 bytes
+button_caps                7s     643400 bytes
+haptic_pad                 8s     239069 bytes
+strap_anchor               7s     200546 bytes
+cable_clip                27s     215861 bytes
+fpc_cover                  1s     256110 bytes
+rain_gutter_segment        9s    1251375 bytes
+    ECHO: "OWSH gutter: drop per segment = 2.93258 mm, front floor = 11.8652 mm, rear floor = 6 mm"
+rain_nozzle_rear           2s     206269 bytes
+worn exports             438s
+assembly_front            22s
+assembly_rear             12s
+assembly_side             13s

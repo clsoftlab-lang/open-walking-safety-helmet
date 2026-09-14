@@ -1,0 +1,111 @@
+name: Bug report
+description: Something does not work as the spec or guides describe. (한국어로 작성하셔도 됩니다.)
+title: "[Bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting. Please write in English if you can; Korean is welcome too.
+        **Security vulnerabilities must not be reported here.** Use the private process in SECURITY.md.
+        **If someone was hurt or nearly hurt**, also consider a field test report, and mark this as safety-related below.
+        Remove personal information (names, faces, exact addresses, phone numbers).
+
+  - type: dropdown
+    id: safety
+    attributes:
+      label: Is this safety-related?
+      description: For example a missed hazard, a warning that did not happen, silence without a FAULT, a module that did not break away.
+      options:
+        - "No"
+        - "Yes - it could cause or did cause harm"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - Firmware - LiDAR warnings (head-height / drop-off)
+        - Firmware - camera (approach / scene / OCR / faces)
+        - Firmware - haptics or audio
+        - Firmware - buttons or SOS
+        - Firmware - watchdog / FAULT
+        - Firmware - power / temperature warnings / safe shutdown
+        - Firmware - setup script or service
+        - Simulator
+        - Phone app
+        - Bluetooth pairing / BLE protocol
+        - Hardware - printed parts
+        - Hardware - wiring
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe what you observed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      description: If possible, name the spec section or guide that describes the expected behaviour.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start the helmet with ...
+        2. Walk toward ...
+        3. ...
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Firmware / app version
+      description: Output of `git rev-parse --short HEAD`, or the release number.
+    validations:
+      required: true
+
+  - type: textarea
+    id: hardware
+    attributes:
+      label: Hardware and environment
+      description: Raspberry Pi model, OS image, sensors, any deviations from the reference build, phone and browser, lighting and weather.
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant output of `journalctl -u owsh`, the app log, or `pytest` output. Remove personal data.
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues.
+          required: true
+        - label: This is not a security vulnerability (those go to SECURITY.md).
+          required: true
+        - label: I removed personal information from this report.
+          required: true

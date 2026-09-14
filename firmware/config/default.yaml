@@ -1,0 +1,215 @@
+# Open Walking Safety Helmet (OWSH) - default configuration
+# Every value mirrors docs/en/00-system-design-spec.md (v1.0). Section numbers refer to that spec.
+# Copy this file, edit the copy and start with:  python -m owsh --config my.yaml
+# Units: metres (m), seconds (s). Unknown keys are ignored with a warning.
+
+general:
+  lang: en                  # voice language: en | ko (phrases in owsh/i18n/<lang>.json)
+  units: metric             # metric | imperial (voice only)
+  data_dir: data            # faces DB, TTS cache, state. Relative paths are relative to firmware/
+  models_dir: models        # ONNX models (python -m owsh.tools.download_models)
+  log_level: INFO
+
+pins:                       # BCM GPIO numbers, spec §4.2 (authoritative)
+  haptic_left: 17           # -> ULN2003 IN1 -> M1 left temple
+  haptic_center: 27         # -> ULN2003 IN2 -> M2 forehead
+  haptic_right: 22          # -> ULN2003 IN3 -> M3 right temple
+  button_b1: 5              # circle, front, active-low with pull-up
+  button_b2: 6              # triangle, middle
+  button_b3: 26             # square, rear
+  status_led: 16
+
+i2c:
+  bus: 1                    # I2C1 on GPIO2/3, 400 kHz
+  tfluna_forward_addr: 0x10 # factory address
+  tfluna_down_addr: 0x11    # changed once with: python -m owsh.tools.tfluna_addr --from 0x10 --to 0x11
+  mpu6050_addr: 0x68
+
+reflex:                     # §5.1 forward LiDAR, head-height obstacles
+  rate_hz: 50.0
+  median_window: 3          # median of last 3 samples
+  min_strength: 100         # strength < 100 or distance = 0 counts as "no return"
+  zone3_m: 2.0              # Z3 notice:    2.0 >= d > 1.2  -> zone3 pattern, no voice
+  zone2_m: 1.2              # Z2 warning:   1.2 >= d > 0.6  -> zone2 pattern, "Obstacle ahead"
+  zone1_m: 0.6              # Z1 imminent:  d <= 0.6        -> zone1 continuous, "Stop"
+  hysteresis_m: 0.1         # leaving a zone needs d > threshold + 0.1 m
+  z1_no_return_hold_s: 0.5  # below 0.2 m TF-Luna gives no return: keep Z1 for 0.5 s, don't go silent
+  zone2_voice_cooldown_s: 5.0   # "Obstacle ahead" at most once per 5 s
+  zone1_voice_cooldown_s: 3.0   # "Stop" repeat limit
+  zone3_alert_cooldown_s: 5.0   # BLE alert rate limit for Z3 notices
+
+dropoff:                    # §5.2 down-looking LiDAR, drop-offs and steps
+  enabled: true
+  tilt_deg: 50.0            # sensor tilt below horizontal
+  sensor_height_m: 1.7      # start value before learning: d0 = height / sin(tilt)
+  learn_window_s: 3.0       # rolling median window of low-variance samples
+  learn_max_std_m: 0.05     # window std-dev must be below this to learn (level ground)
+  d0_min_m: 1.2             # learned d0 is clamped to 1.2..3.5 m
+  d0_max_m: 3.5
+  drop_ratio: 1.30          # DROP if d > d0 * 1.30 (or no return), sustained
+  step_ratio: 0.70          # STEP UP if d < d0 * 0.70, sustained
+  big_drop_ratio: 1.6       # d > d0 * 1.6 or no return -> "Drop ahead" instead of "Step down ahead"
+  sustain_s: 0.12           # condition must last >= 120 ms
+  cooldown_s: 3.0           # per type
+  no_return_is_drop: true   # a missed drop is worse than a false alarm
+  sensitivity: normal       # low (1.45 / 0.55) | normal (ratios above) | high (1.20 / 0.80)
+  relearn_shorter_after_s: 10.0  # a stable shorter distance (e.g. sitting) is re-learned after 10 s
+  allow_relearn_longer: false    # never silently learn a LONGER distance (could hide a platform edge)
+
+vision:                     # §5.3
+  enabled: true
+  source: auto              # auto (Picamera2 on Pi, else OpenCV) | picamera2 | opencv | video
+  camera_index: 0
+  video_path: ""
+  video_loop: true
+  width: 1280
+  height: 720
+  hfov_deg: 102.0           # Camera Module 3 Wide horizontal FOV
+  dehaze: auto              # auto | on | off (CLAHE on luminance)
+  dehaze_auto_mean_below: 70.0  # auto: apply when mean luminance < 70 ...
+  dehaze_auto_std_below: 35.0   # ... or contrast (std-dev) < 35
+  clahe_clip: 2.0
+  clahe_grid: 8
+  describe_max_objects: 5
+  detector:
+    model: object_detection_nanodet_2022nov.onnx   # NanoDet-Plus-m 416, Apache-2.0
+    input_size: 416
+    score_threshold: 0.35
+    nms_threshold: 0.6
+    num_threads: 0          # 0 = OpenCV default
+    color_order: rgb        # rgb = OpenCV Zoo demo; bgr = upstream NanoDet training convention
+    classes: [person, bicycle, car, motorcycle, bus, truck, dog, horse, bench, fire hydrant,
+              stop sign, parking meter, traffic light, chair, potted plant, suitcase]
+    movers: [person, bicycle, car, motorcycle, bus, truck, dog, horse]
+    vehicles: [bicycle, car, motorcycle, bus, truck]   # use the longer P2 TTC (4.0 s)
+  tracker:
+    iou_threshold: 0.3      # greedy IoU matching, same class only
+    max_age_s: 0.7          # track kept 0.7 s without detections
+    ttc_window_s: 0.4       # TTC scale ratio measured over >= 0.4 s
+    ttc_max_window_s: 1.0
+    height_smoothing: 0.5   # EMA factor for bbox height
+    center_deg: 15.0        # LEFT < -15 deg <= CENTER <= +15 deg < RIGHT
+  approach:
+    p1_ttc_s: 1.5           # APPROACH P1: mover, TTC < 1.5 s and bbox height > 20 %
+    p1_min_height: 0.20
+    p2_ttc_s: 3.0           # APPROACH P2: TTC < 3.0 s (vehicles < 4.0 s) and height > 10 %
+    p2_vehicle_ttc_s: 4.0
+    p2_min_height: 0.10
+    cooldown_s: 5.0         # per track, same level; escalation bypasses
+    confirm_frames: 2       # condition must hold on 2 consecutive track updates (bbox jitter)
+  blocked:                  # §5.7 camera covered / too dark / smeared
+    dark_mean_max: 12.0     # mean luminance < 12 ...
+    dark_std_max: 6.0       # ... and std-dev < 6 ...
+    dark_hold_s: 3.0        # ... for >= 3 s
+    dark_pixel_frac: 0.97   # also dark if >= 97 % of pixels are < 12 (light leak / driver "camera off" icon)
+    blur_lapvar_max: 5.0    # Laplacian variance < 5 ...
+    blur_hold_s: 5.0        # ... for >= 5 s
+    clear_hold_s: 1.0       # conditions must be clear for 1 s before "recovered"
+    check_hz: 5.0
+
+faces:                      # §5.4
+  enabled: true
+  detector_model: face_detection_yunet_2023mar.onnx   # MIT
+  recognizer_model: face_recognition_sface_2021dec.onnx  # Apache-2.0
+  rate_hz: 2.0              # <= 2 Hz, only while persons are detected
+  detect_width: 640         # frame is downscaled to this width for YuNet
+  detect_score_min: 0.6     # accept partial / masked faces from this confidence
+  nms_threshold: 0.3
+  cosine_threshold: 0.363   # SFace recommended; lower it for masked faces
+  cooldown_s: 60.0          # per person
+
+ocr:                        # §5.5 (pip install .[ocr])
+  enabled: true
+  languages: [en, ko]
+  det_model_path: ""        # empty = RapidOCR bundled models
+  rec_model_path: ""        # set a Korean recognition model here for Hangul
+  rec_keys_path: ""
+  crop_frac: 0.70           # centre 70 % crop
+  max_chars: 200
+  min_score: 0.5
+  danger_keywords:
+    en: [DANGER, CAUTION, WARNING, WET FLOOR, KEEP OUT, NO ENTRY]
+    ko: [위험, 공사, 주의, 경고, 출입금지, 미끄럼]
+
+imu:                        # §5.6 fall detection
+  enabled: true
+  rate_hz: 100.0
+  freefall_g: 0.35          # |a| < 0.35 g ...
+  freefall_min_s: 0.08      # ... for >= 80 ms
+  impact_g: 2.5             # then |a| > 2.5 g ...
+  impact_window_s: 1.0      # ... within 1 s
+  still_band_g: 0.15        # then |a| within 1 +/- 0.15 g ...
+  still_s: 2.0              # ... for 2 s -> FALL
+  still_timeout_s: 6.0      # give up if the stillness period does not start within 6 s of impact
+
+haptics:                    # §6
+  tick_ms: 10.0             # mixer tick
+  max_duty: 0.75            # ULN2003 gives ~4 V; 75 % keeps 3 V motors safe
+  duty_mode: cap            # cap: duty = min(intensity, 0.75) | scale: duty = intensity * 0.75
+  pwm_hz: 200.0
+
+audio:                      # §7.1
+  backend: auto             # auto: piper (if model set) -> espeak-ng -> pyttsx3 -> print
+  piper_bin: piper
+  piper_model: ""           # path to a piper .onnx voice to enable natural voices
+  player: aplay
+  espeak_voices: {en: en-us, ko: ko}
+  rate_wpm: 170
+  volume: 80                # 0..100
+  max_queue: 3              # at most 3 queued items
+  stale_s: 2.0              # queued P1/P2 older than 2 s are dropped
+  cache_dir: cache/tts      # under data_dir; pre-rendered WAV for fixed phrases
+
+buttons:                    # §7.2
+  short_max_s: 0.8          # short press < 0.8 s
+  long_min_s: 1.5           # long press >= 1.5 s (B1, B2)
+  sos_hold_s: 3.0           # B3 hold 3 s -> SOS countdown
+  double_gap_s: 0.4         # double press: second press < 0.4 s after the first release
+  shutdown_hold_s: 5.0      # hold B1 + B3 together for 5 s -> "Shutting down" -> poweroff (suppresses SOS)
+  debounce_s: 0.03
+  poll_hz: 50.0
+
+sos:                        # §7.3
+  countdown_s: 10.0
+  resend_s: 5.0             # repeat "sos" until the phone acks
+  no_phone_alarm_s: 60.0    # no phone: keep the countdown pattern for 60 s
+  no_phone_voice_every_s: 10.0
+
+watchdog:                   # §5.7
+  camera_timeout_s: 2.0
+  lidar_timeout_s: 0.5
+  imu_timeout_s: 1.0
+  fault_repeat_s: 10.0      # FAULT repeats every 10 s while active
+  check_hz: 10.0
+
+ble:                        # §8 Nordic UART Service
+  enabled: true
+  name_prefix: OWSH         # advertised as OWSH-XXXX (last 4 hex of the BT MAC)
+  chunk_size: 20            # MTU 23 - 3, works with every phone
+  chunk_gap_ms: 15.0
+  status_every_s: 10.0
+  phone_say_min_level: 2    # "say" from the phone is clamped to P2..P4
+  say_min_interval_s: 3.0   # at most one "say" per 3 s; extra ones are dropped
+  security: encrypt         # none | encrypt (pairing required, Just Works) | authenticated (needs passkey agent)
+  bonded_only: true         # accept phone messages only from bonded phones
+  pairing_window_s: 120.0   # once a phone is bonded, pairing is open only 120 s after boot
+  confirm_volume_below: 30  # phone "cfg" volume below 30 % is announced by voice
+
+power:                      # Raspberry Pi supply and temperature warnings
+  enabled: true
+  poll_s: 5.0               # read get_throttled + CPU temperature every 5 s
+  undervoltage_hold_s: 10.0 # under-voltage (bit 0) for >= 10 s -> "Power is low. Charge the battery soon."
+  undervoltage_repeat_s: 300.0  # repeat at most every 5 min while it persists
+  overheat_c: 80.0          # CPU >= 80 degC -> "Helmet is overheating."
+  overheat_clear_c: 75.0    # re-armed below 75 degC
+  overheat_repeat_s: 300.0
+  shutdown_delay_s: 3.0     # time for "Shutting down" before poweroff
+
+location:
+  fresh_s: 60.0             # a location younger than this is spoken immediately
+  wait_s: 5.0               # otherwise wait this long for the phone's reply
+
+sim:                        # --sim start values (the dashboard sliders change them)
+  forward_m: 0.0            # 0 = no return (clear)
+  down_m: 2.2
+  noise_m: 0.01

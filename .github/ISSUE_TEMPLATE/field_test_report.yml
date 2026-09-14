@@ -1,0 +1,149 @@
+name: Field test report
+description: Share results from a real-world walk, a user trial or a test plan run. Failures are as valuable as successes. (한국어로 작성하셔도 됩니다.)
+title: "[Field test] "
+labels: ["field-test"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for testing. Please follow docs/en/06-safety.md and docs/en/07-test-plan.md.
+        **Do not include names, faces, exact home or work addresses, or phone numbers.**
+        Only attach photos or video if everyone identifiable agreed.
+        If someone was injured, please say so clearly below. Maintainers treat these reports first.
+
+  - type: dropdown
+    id: incident
+    attributes:
+      label: Safety incidents
+      description: An incident is an injury, a fall, or contact with an obstacle that caused pain.
+      options:
+        - "None"
+        - "Near miss only (someone had to intervene)"
+        - "Incident occurred"
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Firmware version
+      description: "`git rev-parse --short HEAD` or release number"
+    validations:
+      required: true
+
+  - type: textarea
+    id: build
+    attributes:
+      label: Build
+      description: Deviations from the reference build (parts, printed parts, mounting), config changes from default.yaml, helmet model and size.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test-type
+    attributes:
+      label: Type of test
+      multiple: true
+      options:
+        - Everyday walk
+        - Test plan procedure (T1-T12)
+        - User trial with O&M instructor (T12)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: tests-run
+    attributes:
+      label: Test plan IDs run (if any)
+      placeholder: "e.g. T4, T5, T8"
+    validations:
+      required: false
+
+  - type: textarea
+    id: session
+    attributes:
+      label: Session
+      description: Date, country and city (no exact addresses), environment (indoor, quiet street, busy street, station, park), light, weather, temperature, duration.
+    validations:
+      required: true
+
+  - type: textarea
+    id: people
+    attributes:
+      label: People
+      description: Wearer (blind / low vision / sighted tester), cane / guide dog / none, O&M instructor present (yes / no), travel experience (optional).
+    validations:
+      required: true
+
+  - type: textarea
+    id: worked
+    attributes:
+      label: What worked
+    validations:
+      required: false
+
+  - type: textarea
+    id: missed
+    attributes:
+      label: Missed hazards
+      description: The helmet stayed silent when it should have warned. What was it, where, lighting, surface?
+    validations:
+      required: false
+
+  - type: textarea
+    id: false-alarms
+    attributes:
+      label: False alarms
+      description: Pattern or message, and what was actually there.
+    validations:
+      required: false
+
+  - type: textarea
+    id: faults
+    attributes:
+      label: Faults
+      description: FAULT messages heard, what caused them, whether they recovered.
+    validations:
+      required: false
+
+  - type: textarea
+    id: results
+    attributes:
+      label: Measured results
+      description: Paste the results table or per-trial log from the test plan, if you ran procedures.
+    validations:
+      required: false
+
+  - type: textarea
+    id: comfort
+    attributes:
+      label: Comfort and usability
+      description: Weight, heat, pad positions, buttons, voice volume, how easy the patterns were to learn.
+    validations:
+      required: false
+
+  - type: textarea
+    id: incident-details
+    attributes:
+      label: Incident or near-miss details
+      description: What happened and what the helmet did or did not do. No personal information.
+    validations:
+      required: false
+
+  - type: textarea
+    id: suggestions
+    attributes:
+      label: Suggestions
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Consent and privacy
+      options:
+        - label: I removed personal information from this report.
+          required: true
+        - label: Everyone identifiable in attached media agreed to share it (or there is no media).
+          required: true
