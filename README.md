@@ -124,6 +124,13 @@ reach. With today's AI tools, including Claude, it has become possible to design
 the software and publish everything. So he is giving it to the world for free.
 CLSOFTLAB and Dr. Lee Il-guk will keep developing it.
 
+## Contributors
+
+- **CLSOFTLAB (씨엘소프트랩), Dr. Lee Il-guk** — inventor and project lead
+- **LWJ** — high school student, Gyeonggi-do, Korea
+- **LMJ** — middle school student, Gyeonggi-do, Korea
+- Designed and built with Claude (Anthropic's AI)
+
 ## Licence
 
 - Software: [Apache-2.0](LICENSES/Apache-2.0.txt)
